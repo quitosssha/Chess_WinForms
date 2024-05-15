@@ -55,6 +55,7 @@
     <Compile Include="Controls\DragAndDrop.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Models\FigureColor.cs" />
     <Compile Include="Models\Figures.cs" />
     <Compile Include="Models\BoardState.cs" />
     <Compile Include="Program.cs" />

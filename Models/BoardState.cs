@@ -11,6 +11,7 @@ namespace Chess
 	{
 		public const int Size = 8;
 		public Figure[,] Figures { get; private set; } = new Figure[Size, Size];
+		public FigureColor currentMove { get; private set; } = FigureColor.White;
 
 		public BoardState()
 		{
@@ -40,13 +41,17 @@ namespace Chess
 		public Figure this[int row, int column] =>
 			Figures[row, column];
 
-		public void MoveFigure(int fromRow, int fromColumn, int toRow, int toColumn)
+		public bool TryMoveFigure(int fromRow, int fromColumn, int toRow, int toColumn)
 		{
-			if (Figures[fromRow, fromColumn] != null)
+			var figure = Figures[fromRow, fromColumn];
+			if (figure != null)
 			{
-				Figures[toRow, toColumn] = Figures[fromRow, fromColumn];
                 Figures[fromRow, fromColumn] = null;
+				Figures[toRow, toColumn] = figure;
 			}
+			var name = figure.GetType().Name;
+			Console.WriteLine($"Moved {name} from ({7 - fromColumn},{fromRow}) to ({7 - toColumn},{toRow})");
+			return true;
 		}
 	}
 }

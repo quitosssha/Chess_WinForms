@@ -36,24 +36,26 @@ namespace Chess
         {
             if (sender is Panel targetCell && e.Data.GetData(typeof(PictureBox)) is PictureBox sourcePictureBox)
             {
-                if (sourcePictureBox.Parent is Panel sourceCell)
-                    sourceCell.Controls.Remove(sourcePictureBox);
-
-                targetCell.Controls.Clear();
-                targetCell.Controls.Add(sourcePictureBox);
-
                 var sourcePosition = (Point)sourcePictureBox.Tag;
                 var targetPosition = chessBoard.GetPointFromControl(targetCell);
+                bool allowedMove;
 
                 var s = BoardState.Size;
                 if (_viewFromBlack)
-                    boardState.MoveFigure(sourcePosition.Y, sourcePosition.X,
+                    allowedMove = boardState.TryMoveFigure(sourcePosition.Y, sourcePosition.X,
                                             targetPosition.Y, targetPosition.X);
                 else
-                    boardState.MoveFigure(s - 1 - sourcePosition.Y, s - 1 - sourcePosition.X,
+					allowedMove = boardState.TryMoveFigure(s - 1 - sourcePosition.Y, s - 1 - sourcePosition.X,
                                             s - 1 - targetPosition.Y, s - 1 - targetPosition.X);
 
-                sourcePictureBox.Tag = targetPosition;
+                if (allowedMove)
+                {
+                    if (sourcePictureBox.Parent is Panel sourceCell)
+                        sourceCell.Controls.Remove(sourcePictureBox);
+                    targetCell.Controls.Clear();
+                    targetCell.Controls.Add(sourcePictureBox);
+					sourcePictureBox.Tag = targetPosition;
+				}
             }
         }
     }

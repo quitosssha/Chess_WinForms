@@ -6,13 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-    public enum FigureColor
-    {
-        White,
-        Black
-    }
-
-    public abstract class Figure
+	public abstract class Figure
 	{
 		public Figure(FigureColor color)
 		{
