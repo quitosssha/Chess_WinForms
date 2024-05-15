@@ -45,19 +45,21 @@ namespace Chess
 		{
 			var figure = Figures[fromRow, fromColumn];
 			var allowedMoves = figure.GetAllowedMoves(this, fromRow, fromColumn);
-			
-			if (!allowedMoves.Contains((toRow, toColumn)))
-				return false;
 
-			if (figure != null)
+			if (allowedMoves.Contains((toRow, toColumn)))
 			{
-                Figures[fromRow, fromColumn] = null;
-				Figures[toRow, toColumn] = figure;
+				if (figure != null)
+				{
+					Figures[fromRow, fromColumn] = null;
+					Figures[toRow, toColumn] = figure;
+				}
+				var name = figure.GetType().Name;
+				Console.WriteLine($"Moved {name} from ({Size - fromColumn},{fromRow}) " +
+													$"to ({Size - toColumn},{toRow})");
+				return true;
 			}
-			var name = figure.GetType().Name;
-			Console.WriteLine($"Moved {name} from ({Size - fromColumn},{fromRow}) " +
-												$"to ({Size - toColumn},{toRow})");
-			return true;
+
+			return false;
 		}
 
 		public bool InBounds(int row, int column) =>

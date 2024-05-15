@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,45 @@ namespace Chess
 		public FigureColor Color { get; }
 		public abstract IEnumerable<(int Row, int Column)> GetAllowedMoves
 			(BoardState state, int row, int column);
+
+		protected List<(int, int)> horizontalDirections = 
+			new List<(int, int)>() { (-1, 0), (1, 0), (0, -1), (0, 1) };
+
+		protected List<(int, int)> diagonalDirections =
+			new List<(int, int)>() { (-1, -1), (-1, 1), (1, -1), (1, 1) };
+
+		protected List<(int, int)> knightMoves = new List<(int, int)>
+		{
+			(2, 1), (2, -1), (-2, 1), (-2, -1),
+			(1, 2), (1, -2), (-1, 2), (-1, -2)
+		};
+
+		protected IEnumerable<(int, int)> GetAllowedMovesInDirections
+			(List<(int, int)> directions, BoardState state, int row, int column)
+		{
+			foreach (var (dRow, dColumn) in directions)
+			{
+				var newR = row + dRow;
+				var newC = column + dColumn;
+
+				while (state.InBounds(newR, newC))
+				{
+					var targetFigure = state[newR, newC];
+
+					if (targetFigure == null)
+						yield return (newR, newC);
+					else
+					{
+						if (targetFigure.Color != Color)
+							yield return (newR, newC);
+						break;
+					}
+
+					newR += dRow;
+					newC += dColumn;
+				}
+			}
+		}
 	}
 
 	public class King : Figure
@@ -44,9 +84,9 @@ namespace Chess
 		public Queen(FigureColor color): base(color) { }
 
 		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
-		{
-			throw new NotImplementedException();
-		}
+			=> GetAllowedMovesInDirections(horizontalDirections
+						.Concat(diagonalDirections).ToList(),
+						state, row, column);
 	}
 
 	public class Rook : Figure
@@ -54,9 +94,7 @@ namespace Chess
 		public Rook(FigureColor color) : base(color) { }
 
 		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
-		{
-			throw new NotImplementedException();
-		}
+			=> GetAllowedMovesInDirections(horizontalDirections, state, row, column);
 	}
 
 	public class Bishop : Figure
@@ -64,9 +102,7 @@ namespace Chess
 		public Bishop(FigureColor color) : base(color) { }
 
 		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
-		{
-			throw new NotImplementedException();
-		}
+			=> GetAllowedMovesInDirections(diagonalDirections, state, row, column);
 	}
 
 	public class Knight : Figure
@@ -75,7 +111,16 @@ namespace Chess
 
 		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
 		{
-			throw new NotImplementedException();
+			foreach (var (dRow, dColumn) in knightMoves)
+			{
+				var newR = row + dRow;
+				var newC = column + dColumn;
+				if (!state.InBounds(newR, newC)) continue;
+
+				var figure = state[newR, newC];
+				if (figure == null || figure.Color != Color)
+					yield return (newR, newC);
+			}
 		}
 	}
 
@@ -85,17 +130,28 @@ namespace Chess
 
 		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
 		{
-			int newR = Color == FigureColor.White ? row + 1 : row - 1;
-			for (int i = -1; i <= 1; i++)
+			int direction = Color == FigureColor.White ? 1 : -1;
+			var newR = row + direction;
+
+			if (state.InBounds(newR, column) && state[newR, column] == null)
+			{
+				yield return (newR, column);
+
+				var startRow = Color == FigureColor.White ? 1 : 6;
+				var dobleStepRow = row + direction * 2;
+				if (row == startRow && state[dobleStepRow, column] == null)
+					yield return (dobleStepRow, column);
+			}
+
+			for (int i = -1; i <= 1; i += 2)
 			{ 
 				int newC = column + i;
-				if (!state.InBounds(newR, newC)) continue;
-
-                if (i == 0 && state[newR, newC] == null)
-					yield return (newR, newC);
-				
-				if (i != 0 && state[newR, newC] != null && state[newR, newC].Color != Color)
-					yield return (newR, newC);
+				if (state.InBounds(newR, newC))
+				{
+					var targetFigure = state[newR, newC];
+					if (targetFigure != null && targetFigure.Color != Color)
+						yield return (newR, newC);
+				}
 			}
 		}
 	}
