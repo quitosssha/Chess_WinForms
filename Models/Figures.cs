@@ -6,14 +6,21 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-	public abstract class Figure
+    public enum FigureColor
+    {
+        White,
+        Black
+    }
+
+    public abstract class Figure
 	{
 		public Figure(FigureColor color)
 		{
 			Color = color;
 		}
 		public FigureColor Color { get; }
-		//public abstract IEnumerable<(int Row, int Column)> GetPossibleMoves();
+		//public abstract IEnumerable<(int Row, int Column)> GetPossibleMoves
+		//	(BoardState currentState, int row, int column);
 	}
 
 	public class King : Figure

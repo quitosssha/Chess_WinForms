@@ -52,11 +52,15 @@
     <Compile Include="ChessForm.Designer.cs">
       <DependentUpon>ChessForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Models\FigureColor.cs" />
-    <Compile Include="Models\_Figures.cs" />
-    <Compile Include="Models\_BoardState.cs" />
+    <Compile Include="Controls\DragAndDrop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\Figures.cs" />
+    <Compile Include="Models\BoardState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\CreatePictureBox.cs" />
+    <Compile Include="Views\Extensions.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
