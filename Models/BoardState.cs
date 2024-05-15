@@ -44,14 +44,23 @@ namespace Chess
 		public bool TryMoveFigure(int fromRow, int fromColumn, int toRow, int toColumn)
 		{
 			var figure = Figures[fromRow, fromColumn];
+			var allowedMoves = figure.GetAllowedMoves(this, fromRow, fromColumn);
+			
+			if (!allowedMoves.Contains((toRow, toColumn)))
+				return false;
+
 			if (figure != null)
 			{
                 Figures[fromRow, fromColumn] = null;
 				Figures[toRow, toColumn] = figure;
 			}
 			var name = figure.GetType().Name;
-			Console.WriteLine($"Moved {name} from ({7 - fromColumn},{fromRow}) to ({7 - toColumn},{toRow})");
+			Console.WriteLine($"Moved {name} from ({Size - fromColumn},{fromRow}) " +
+												$"to ({Size - toColumn},{toRow})");
 			return true;
 		}
+
+		public bool InBounds(int row, int column) =>
+			row >= 0 && column >= 0 && row < Size && column < Size;
 	}
 }
