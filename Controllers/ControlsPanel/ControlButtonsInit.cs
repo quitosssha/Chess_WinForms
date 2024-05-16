@@ -11,14 +11,14 @@ namespace Chess
 	{
 		private void Click_Undo(object sender, EventArgs e)
 		{
-			boardState.Undo();
-			DisplayBoardState(boardState);
+			if (boardState.Undo());
+				DisplayBoardState(boardState);
 		}
 
 		private void Click_Redo(object sender, EventArgs e)
 		{
-			boardState.Redo();
-			DisplayBoardState(boardState);
+			if (boardState.Redo());
+				DisplayBoardState(boardState);
 		}
 
 		private void Click_FlipBoard(object sender, EventArgs e)
