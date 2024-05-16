@@ -8,12 +8,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Chess
 {
 	public partial class ChessForm : Form
 	{
 		private TableLayoutPanel chessBoard = new TableLayoutPanel();
+		private Panel controlPanel = new Panel();
 		private BoardState boardState = new BoardState();
 		private bool _viewFromBlack;
 
@@ -21,40 +23,18 @@ namespace Chess
 		{
 			InitializeComponent();
 			InitializeChessBoard();
-		}
+			InitializeControlPanel();
 
-		private void InitializeChessBoard()
-		{
-			chessBoard.RowCount = BoardState.Size;
-			chessBoard.ColumnCount = BoardState.Size;
-			chessBoard.BackColor = Color.DarkGray;
-			chessBoard.Dock = DockStyle.None;
-
-			chessBoard.FixCellsSize();
-
-			Controls.Add(chessBoard);
-			chessBoard.FillBoardWithCells();
-			DisplayBoardState(boardState);
-			AdjustChessBoardSize();
-		}
+            AdjustChessBoardAndControlPanelSize();
+        }
 
 		protected override void OnResize(EventArgs e)
 		{
 			base.OnResize(e);
-			AdjustChessBoardSize();
+            AdjustChessBoardAndControlPanelSize();
 		}
 
-		private void AdjustChessBoardSize()
-		{
-			int minSize = Math.Min(ClientSize.Width, ClientSize.Height);
-			chessBoard.Size = new Size(minSize, minSize);
-			chessBoard.Location = new Point(
-				(ClientSize.Width - minSize) / 2,
-				(ClientSize.Height - minSize) / 2
-				);
-		}
-
-		private void DisplayBoardState(BoardState boardState, bool fromBlackSide = false)
+		private void DisplayBoardState(BoardState boardState, bool fromBlackSide = true)
 		{
 			_viewFromBlack = fromBlackSide;
             for (int row = 0; row < BoardState.Size; row++)
@@ -75,6 +55,6 @@ namespace Chess
 		private Panel GetCellAtPosition(int row, int col) =>
             chessBoard.GetControlFromPosition(col, row) as Panel
 				//Impossible exception
-				?? throw new Exception($"No cell at position ({row}, {col})!");
+				?? throw new Exception($"No \"Panel\" at position ({row}, {col})!");
     }
 }

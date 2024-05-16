@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace Chess
@@ -54,7 +49,7 @@ namespace Chess
                         sourceCell.Controls.Remove(sourcePictureBox);
                     targetCell.Controls.Clear();
                     targetCell.Controls.Add(sourcePictureBox);
-					sourcePictureBox.Tag = targetPosition;
+                    sourcePictureBox.Tag = targetPosition;
 				}
             }
         }
