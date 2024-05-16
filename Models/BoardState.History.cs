@@ -30,6 +30,7 @@ namespace Chess
 				var lastMove = movesHistory.Pop();
 				lastMove.Undo();
 				undonedMoves.Push(lastMove);
+				SwapCurrentPlayer();
 			}
 
 			return true;
@@ -45,6 +46,7 @@ namespace Chess
 				var moveToRedo = undonedMoves.Pop();
 				moveToRedo.Execute();
 				movesHistory.Push(moveToRedo);
+				SwapCurrentPlayer();
 			}
 
 			return true;

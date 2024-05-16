@@ -17,7 +17,7 @@ namespace Chess
 		private TableLayoutPanel chessBoard = new TableLayoutPanel();
 		private Panel controlPanel = new Panel();
 		private BoardState boardState = new BoardState();
-		private bool _viewFromBlack;
+		private bool _viewFromBlack = false;
 
 		public ChessForm()
 		{
@@ -34,9 +34,8 @@ namespace Chess
             AdjustChessBoardAndControlPanelSize();
 		}
 
-		private void DisplayBoardState(BoardState boardState, bool fromBlackSide = true)
+		private void DisplayBoardState(BoardState boardState)
 		{
-			_viewFromBlack = fromBlackSide;
             for (int row = 0; row < BoardState.Size; row++)
 				for (int col = 0; col < BoardState.Size; col++)
 				{

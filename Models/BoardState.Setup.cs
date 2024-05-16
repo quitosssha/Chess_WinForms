@@ -12,7 +12,7 @@ namespace Chess
 		private void UpdateCell(Cell cell, Figure figure) => this[cell] = figure;
 
 		private void SwapCurrentPlayer() =>
-			currentColorMove = currentColorMove == FigureColor.White 
+			CurrentColorMove = CurrentColorMove == FigureColor.White 
 								? FigureColor.Black : FigureColor.White;
 
 		private void SetupBackRow(FigureColor color, int row)
