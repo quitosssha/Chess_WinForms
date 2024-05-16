@@ -35,13 +35,14 @@ namespace Chess
                 var targetPosition = chessBoard.GetPointFromControl(targetCell);
                 bool allowedMove;
 
+                var from = new Cell(sourcePosition.Y, sourcePosition.X);
+                var to = new Cell(targetPosition.Y, targetPosition.X);
+
                 var s = BoardState.Size;
                 if (_viewFromBlack)
-                    allowedMove = boardState.TryMoveFigure(sourcePosition.Y, sourcePosition.X,
-                                            targetPosition.Y, targetPosition.X);
+                    allowedMove = boardState.TryMoveFigure(from, to);
                 else
-					allowedMove = boardState.TryMoveFigure(s - 1 - sourcePosition.Y, s - 1 - sourcePosition.X,
-                                            s - 1 - targetPosition.Y, s - 1 - targetPosition.X);
+					allowedMove = boardState.TryMoveFigure(from, to);
 
                 if (allowedMove)
                 {
