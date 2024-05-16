@@ -16,10 +16,10 @@ namespace Chess
 		public FigureColor Color { get; }
 		public abstract IEnumerable<(int Row, int Column)> GetAllowedMoves
 			(BoardState state, int row, int column);
-		public IEnumerable<Move> GetAllowedMoves(BoardState state, Cell from)
+		public IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
 		{
 			foreach (var (toR, toC) in GetAllowedMoves(state, from.Row, from.Column))
-				yield return new Move(this, from, new Cell(toR, toC));
+				yield return new Cell(toR, toC);
 		}
 
 		protected readonly List<(int, int)> horizontalDirections = 

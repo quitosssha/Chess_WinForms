@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-	public struct Cell
+	public readonly struct Cell
 	{
 		public int Row { get; }
 		public int Column { get; }

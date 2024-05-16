@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Chess
@@ -33,16 +34,14 @@ namespace Chess
             {
                 var sourcePosition = (Point)sourcePictureBox.Tag;
                 var targetPosition = chessBoard.GetPointFromControl(targetCell);
-                bool allowedMove;
 
-                var from = new Cell(sourcePosition.Y, sourcePosition.X);
-                var to = new Cell(targetPosition.Y, targetPosition.X);
+                Func<int, int> f = pos => pos;
+				if (!_viewFromBlack) f = pos => BoardState.Size - 1 - pos;
 
-                var s = BoardState.Size;
-                if (_viewFromBlack)
-                    allowedMove = boardState.TryMoveFigure(from, to);
-                else
-					allowedMove = boardState.TryMoveFigure(from, to);
+                var from = new Cell(f(sourcePosition.Y), f(sourcePosition.X));
+                var to = new Cell(f(targetPosition.Y), f(targetPosition.X));
+
+    			bool allowedMove = boardState.TryMoveFigure(from, to);
 
                 if (allowedMove)
                 {

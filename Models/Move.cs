@@ -6,21 +6,33 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-	public class Move
+	public class Move : ICommand
 	{
-		public Figure Figure { get; }
-		public Cell From { get; }
-		public Cell To { get; }
-		public Move(Figure figure, Cell from, Cell to)
+		private readonly Figure figure;
+		private readonly Cell from;
+		private readonly Cell to;
+		private readonly Figure capturedFigure;
+		private readonly Action<Cell, Figure> updateCell;
+
+		public Move(Figure figure, Cell from, Cell to, Figure capturedFigure, Action<Cell, Figure> updateCell)
 		{
-			Figure = figure;
-			From = from;
-			To = to;
+			this.figure = figure;
+			this.from = from;
+			this.to = to;
+			this.capturedFigure = capturedFigure;
+			this.updateCell = updateCell;
 		}
 
-		public override bool Equals(object obj)
+		public void Execute()
 		{
-			return base.Equals(obj);
+			updateCell(from, null);
+			updateCell(to, figure);
+		}
+
+		public void Undo()
+		{
+			updateCell(from, figure);
+			updateCell(to, capturedFigure);
 		}
 	}
 }

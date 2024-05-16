@@ -9,6 +9,12 @@ namespace Chess
 {
 	public partial class BoardState
 	{
+		private void UpdateCell(Cell cell, Figure figure) => this[cell] = figure;
+
+		private void SwapCurrentPlayer() =>
+			currentColorMove = currentColorMove == FigureColor.White 
+								? FigureColor.Black : FigureColor.White;
+
 		private void SetupBackRow(FigureColor color, int row)
 		{
 			Figures[row, 0] = new Rook(color);
@@ -23,40 +29,11 @@ namespace Chess
 
 		private void ReportMove(Figure figure, Cell from, Cell to)
 		{
+			var color = figure.Color.ToString().ToLower();
 			var name = figure.GetType().Name;
 			Console.WriteLine
-				($"Moved {name} from ({Size - from.Column},{from.Row}) " +
+				($"Moved {color} {name} from ({Size - from.Column},{from.Row}) " +
 				$"to ({Size - to.Column},{to.Row})");
-		}
-
-		private bool KingIsChecked(FigureColor kingColor)
-		{
-			Cell kingPos = FindKing(kingColor);
-
-			for (int row = 0; row < Size; row++)
-				for (int col = 0; col < Size; col++)
-				{
-					var figure = this[row, col];
-					if (figure != null)
-					{
-						var moves = figure.GetAllowedMoves(this, row, col);
-						if (moves.Contains((kingPos.Row, kingPos.Column)))
-							return true;
-					}
-				}
-			return false;
-		}
-
-		private Cell FindKing(FigureColor color)
-		{
-			for (int row = 0; row < Size; row++)
-				for (int col = 0; col < Size; col++)
-				{
-					var figure = this[row, col];
-					if (figure is King && figure?.Color == color)
-						return new Cell(row, col);
-				}
-			throw new Exception($"No {color.ToString().ToLower()} king on board");
 		}
 	}
 }

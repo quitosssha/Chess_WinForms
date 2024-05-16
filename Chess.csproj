@@ -55,12 +55,17 @@
     <Compile Include="Controllers\DragAndDrop.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Models\Cell.cs" />
-    <Compile Include="Models\History\HistoryStack.cs" />
-    <Compile Include="Models\FigureColor.cs" />
+    <Compile Include="Models\Small\Cell.cs" />
+    <Compile Include="Models\Small\ICommand.cs" />
     <Compile Include="Models\_Figures.cs" />
+    <Compile Include="Models\FigureColor.cs">
+      <DependentUpon>_Figures.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\_BoardState.cs" />
     <Compile Include="Models\BoardState.Setup.cs">
+      <DependentUpon>_BoardState.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\BoardState.History.cs">
       <DependentUpon>_BoardState.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\Move.cs" />
@@ -80,6 +85,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Models\BoardState.Check.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

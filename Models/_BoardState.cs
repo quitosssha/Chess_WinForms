@@ -13,7 +13,6 @@ namespace Chess
 		public const int Size = 8;
 		public Figure[,] Figures { get; private set; } = new Figure[Size, Size];
 		public FigureColor currentColorMove { get; private set; } = FigureColor.White;
-		
 
 		public BoardState()
 		{
@@ -39,20 +38,32 @@ namespace Chess
 			private set => this[cell.Row, cell.Column] = value;
 		}
 
-		public bool TryMoveFigure(Cell from, Cell to)
+		public bool TryMoveFigure(Cell from, Cell to, bool simulate = false)
 		{
 			var figure = this[from];
 			var allowedMoves = figure.GetAllowedMoves(this, from);
 
-			if (allowedMoves.Any(move => move.To.Equals(to)))
+			if (figure.Color == currentColorMove && allowedMoves.Any(dst => to.Equals(dst)))
 			{
-				this[from] = null;
-				this[to] = figure;
-				var move = new Move(figure, from, to);
+				var capturedFigure = this[to];
+				var move = new Move(figure, from, to, capturedFigure, UpdateCell);
+				ExecuteMove(move);
 
+				if (IsCheck(currentColorMove))
+				{
+					TerminateLastMove();
+					if (!simulate && IsCheckmate(currentColorMove))
+						Console.WriteLine($"{currentColorMove} checkmated!");
+					return false;
+				}
 
-
-				ReportMove(figure, from, to);
+				if (simulate)
+					TerminateLastMove();
+				else
+				{
+					SwapCurrentPlayer();
+					ReportMove(figure, from, to);
+				}
 				return true;
 			}
 
