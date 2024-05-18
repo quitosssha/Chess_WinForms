@@ -14,7 +14,15 @@ namespace Chess
             cell.DragDrop += Cell_DragDrop;
         }
 
-        private void PictureBox_MouseDown(object sender, MouseEventArgs e)
+		public void DisableDragAndDrop(Panel cell, PictureBox pictureBox)
+		{
+            cell.AllowDrop = false;
+			pictureBox.MouseDown -= PictureBox_MouseDown;
+			cell.DragOver -= Cell_DragOver;
+			cell.DragDrop -= Cell_DragDrop;
+		}
+
+		private void PictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             var pictureBox = sender as PictureBox;
             if (pictureBox?.Image != null)
@@ -45,10 +53,11 @@ namespace Chess
 
                 if (allowedMove)
                 {
-                    if (sourcePictureBox.Parent is Panel sourceCell)
-                        sourceCell.Controls.Remove(sourcePictureBox);
-                    targetCell.Controls.Clear();
-                    targetCell.Controls.Add(sourcePictureBox);
+                    //if (sourcePictureBox.Parent is Panel sourceCell)
+                    //    sourceCell.Controls.Remove(sourcePictureBox);
+                    //targetCell.Controls.Clear();
+                    //targetCell.Controls.Add(sourcePictureBox);
+                    DisplayBoardState(boardState, boardState.LastChangedCells);
                     sourcePictureBox.Tag = targetPosition;
 				}
             }

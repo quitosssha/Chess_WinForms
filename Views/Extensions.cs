@@ -14,7 +14,7 @@ namespace Chess
         {
             for (int i = 0; i < BoardState.Size; i++)
             {
-                chessBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 12.5f));
+                chessBoard.RowStyles.Add(new RowStyle(SizeType.Percent, 100 / (float)BoardState.Size));
                 chessBoard.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 12.5f));
             }
         }

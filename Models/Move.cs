@@ -6,33 +6,47 @@ using System.Threading.Tasks;
 
 namespace Chess
 {
-	public class Move : ICommand
+	public class Move : BoardAction
 	{
-		private readonly Figure figure;
-		private readonly Cell from;
-		private readonly Cell to;
-		private readonly Figure capturedFigure;
-		private readonly Action<Cell, Figure> updateCell;
+		public Figure Figure { get; }
+		public Cell From { get; }
+		public Cell To { get; }
+		public Figure CapturedFigure { get; }
+		public Action<Cell, Figure> UpdateCell { get; }
+
+		public override IEnumerable<Cell> ChangedCells
+		{
+			get
+			{
+				yield return From;
+				yield return To; 
+			}
+		}
 
 		public Move(Figure figure, Cell from, Cell to, Figure capturedFigure, Action<Cell, Figure> updateCell)
 		{
-			this.figure = figure;
-			this.from = from;
-			this.to = to;
-			this.capturedFigure = capturedFigure;
-			this.updateCell = updateCell;
+			this.Figure = figure;
+			this.From = from;
+			this.To = to;
+			this.CapturedFigure = capturedFigure;
+			this.UpdateCell = updateCell;
 		}
 
-		public void Execute()
+		public override void Execute()
 		{
-			updateCell(from, null);
-			updateCell(to, figure);
+			Figure.TimesMoved++;
+			UpdateCell(From, null);
+			UpdateCell(To, Figure);
 		}
 
-		public void Undo()
+		public override void Undo()
 		{
-			updateCell(from, figure);
-			updateCell(to, capturedFigure);
+			Figure.TimesMoved--;
+			UpdateCell(From, Figure);
+			UpdateCell(To, CapturedFigure);
 		}
+
+		public bool IsCastling() =>
+			Figure is King && Cell.Distance(From, To) > 1;
 	}
 }

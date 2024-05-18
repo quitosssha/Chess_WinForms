@@ -35,7 +35,7 @@ namespace Chess
             Controls.Add(controlPanel);
         }
 
-        private void AdjustChessBoardAndControlPanelSize()
+        private void AdjustAllSizes()
         {
             int minSize = Math.Min(ClientSize.Width, ClientSize.Height - controlPanel.Height);
             chessBoard.Size = new Size(minSize, minSize);

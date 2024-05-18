@@ -13,6 +13,7 @@ namespace Chess
 		{
 			Color = color;
 		}
+		public int TimesMoved { get; set; } = 0;
 		public FigureColor Color { get; }
 		public abstract IEnumerable<(int Row, int Column)> GetAllowedMoves
 			(BoardState state, int row, int column);
@@ -81,6 +82,34 @@ namespace Chess
 
 					yield return (newR, newC);
 				}
+
+			Cell[] shortCastling = new[] { 
+				new Cell(row, column - 1), 
+				new Cell(row, column - 2) };
+			Cell[] longCastling = new[] {
+				new Cell(row, column + 1),
+				new Cell(row, column + 2) };
+			Cell[] LongCastlingFull = longCastling.Append(new Cell(row, column + 3)).ToArray();
+
+			if (TimesMoved == 0)
+			{
+
+				var rook = state[row, 0];
+				if (rook is Rook && rook.TimesMoved == 0 
+					&& state.AreCellsEmpty(LongCastlingFull)
+					&& !state.IsUnderAttack(Color, longCastling))
+				{
+					yield return (row, column + 2);
+				}
+
+				rook = state[row, 7];
+				if (rook is Rook && rook.TimesMoved == 0
+					&& state.AreCellsEmpty(shortCastling)
+					&& !state.IsUnderAttack(Color, shortCastling))
+				{
+					yield return (row, column - 2);
+				}
+			}
 		}
 	}
 

@@ -13,6 +13,7 @@ namespace Chess
 		public const int Size = 8;
 		public Figure[,] Figures { get; private set; } = new Figure[Size, Size];
 		public FigureColor CurrentColorMove { get; private set; } = FigureColor.White;
+		public IEnumerable<Cell> LastChangedCells { get; private set; }
 
 		public BoardState()
 		{
@@ -40,20 +41,25 @@ namespace Chess
 
 		public bool TryMoveFigure(Cell from, Cell to, bool simulate = false)
 		{
-			var figure = this[from];
+			var figure = this[from]
+				?? throw new Exception($"No figure at position {from}");
+
 			var allowedMoves = figure.GetAllowedMoves(this, from);
 
 			if (figure.Color == CurrentColorMove && allowedMoves.Any(dst => to.Equals(dst)))
 			{
 				var capturedFigure = this[to];
 				var move = new Move(figure, from, to, capturedFigure, UpdateCell);
-				ExecuteMove(move);
+				BoardAction moveToExecute = move.IsCastling() ? new CastlingMove(move) as BoardAction : move;
+				ExecuteMove(moveToExecute);
+				//if (castlingMove != null)
+				//	ExecuteMove(new CastlingMove(move));
+				//else
+				//	ExecuteMove(move);
 
 				if (IsCheck(CurrentColorMove))
 				{
 					TerminateLastMove();
-					if (!simulate && IsCheckmate(CurrentColorMove))
-						Console.WriteLine($"{CurrentColorMove} checkmated!");
 					return false;
 				}
 
@@ -63,6 +69,9 @@ namespace Chess
 				{
 					SwapCurrentPlayer();
 					ReportMove(figure, from, to);
+					LastChangedCells = moveToExecute.ChangedCells;
+					if (IsCheckmate(CurrentColorMove))
+						Console.WriteLine($"{CurrentColorMove} checkmated!");
 				}
 				return true;
 			}
@@ -72,5 +81,12 @@ namespace Chess
 
 		public bool InBounds(int row, int column) =>
 			row >= 0 && column >= 0 && row < Size && column < Size;
+
+		public bool AreCellsEmpty(params Cell[] cells)
+		{
+			foreach (var cell in cells)
+				if (this[cell] != null) return false;
+			return true;
+		}
 	}
 }

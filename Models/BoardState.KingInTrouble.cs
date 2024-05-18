@@ -8,13 +8,13 @@ namespace Chess
 {
     public partial class BoardState
     {
-		private bool IsCheck(FigureColor playerColor)
+		public bool IsCheck(FigureColor playerColor)
 		{
 			var kingPos = FindKing(playerColor);
-			return IsUnderAttack(kingPos, playerColor);
+			return IsUnderAttack(playerColor, kingPos);
 		}
 
-		private bool IsCheckmate(FigureColor playerColor)
+		public bool IsCheckmate(FigureColor playerColor)
 		{
 			if (!IsCheck(playerColor)) return false;
 
@@ -34,7 +34,7 @@ namespace Chess
 			return true;
 		}
 
-		private bool IsUnderAttack(Cell position, FigureColor playerColor)
+		public bool IsUnderAttack(FigureColor playerColor, params Cell[] positions)
 		{
 			for (int row = 0; row < Size; row++)
 				for (int col = 0; col < Size; col++)
@@ -43,8 +43,9 @@ namespace Chess
 					if (figure != null && figure.Color != playerColor)
 					{
 						var moves = figure.GetAllowedMoves(this, row, col);
-						if (moves.Contains((position.Row, position.Column)))
-							return true;
+						foreach (var position in positions)
+							if (moves.Contains((position.Row, position.Column)))
+								return true;
 					}
 				}
 			return false;
@@ -52,10 +53,11 @@ namespace Chess
 
 		private Cell FindKing(FigureColor color)
 		{
+			Figure figure;
 			for (int row = 0; row < Size; row++)
 				for (int col = 0; col < Size; col++)
 				{
-					var figure = this[row, col];
+					figure = this[row, col];
 					if (figure is King && figure?.Color == color)
 						return new Cell(row, col);
 				}
