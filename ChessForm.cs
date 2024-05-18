@@ -34,22 +34,24 @@ namespace Chess
             AdjustAllSizes();
 		}
 
-		private void DisplayBoardState(BoardState boardState, IEnumerable<Cell> cellsToUpdate = null)
+		private void DisplayBoardState(IEnumerable<Cell> cellsToUpdate = null)
 		{
 			if (cellsToUpdate != null)
 				foreach (Cell c in cellsToUpdate)
 				{
-					var row = _viewFromBlack ? c.Row : BoardState.Size - 1 - c.Row;
-					var col = _viewFromBlack ? c.Column : BoardState.Size - 1 - c.Column;
+					var row = c.Row.InvertIfWhite(_viewFromBlack);
+					var col = c.Column.InvertIfWhite(_viewFromBlack);
 					DisplayCellAt(row, col);
 				}
 			else
 				for (int row = 0; row < BoardState.Size; row++)
 					for (int col = 0; col < BoardState.Size; col++)
 					{
-						var cell = GetCellAtPosition(row, col);
 						DisplayCellAt(row, col);
 					}
+
+			if (controlPanel.Controls.Count != 0)
+				UpdateButtonsActivity();
 		}
 
 		private void DisplayCellAt(int row, int column)
@@ -61,8 +63,8 @@ namespace Chess
 					DisableDragAndDrop(cell, existingPictureBox);
 
 			cell.Controls.Clear();
-			var figure = boardState[_viewFromBlack ? row : BoardState.Size - 1 - row,
-									_viewFromBlack ? column : BoardState.Size - 1 - column];
+			var figure = boardState[row.InvertIfWhite(_viewFromBlack), 
+									column.InvertIfWhite(_viewFromBlack)];
 			var pictureBox = ChessImages.CreatePictureBoxForFigure(figure, row, column);
 
 			EnableDragAndDrop(cell, pictureBox);

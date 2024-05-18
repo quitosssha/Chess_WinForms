@@ -20,8 +20,8 @@ namespace Chess
             chessBoard.FixCellsSize();
 
             Controls.Add(chessBoard);
-            chessBoard.FillBoardWithCells();
-            DisplayBoardState(boardState);
+            chessBoard.FillBoardWithCells(_viewFromBlack);
+            DisplayBoardState();
         }
 
         private void InitializeControlPanel()

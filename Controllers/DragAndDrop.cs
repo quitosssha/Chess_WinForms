@@ -57,7 +57,7 @@ namespace Chess
                     //    sourceCell.Controls.Remove(sourcePictureBox);
                     //targetCell.Controls.Clear();
                     //targetCell.Controls.Add(sourcePictureBox);
-                    DisplayBoardState(boardState, boardState.LastChangedCells);
+                    DisplayBoardState(boardState.LastChangedCells);
                     sourcePictureBox.Tag = targetPosition;
 				}
             }

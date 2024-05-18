@@ -14,19 +14,37 @@ namespace Chess
 		{
 			Button undoButton = new Button();
 			undoButton.Image = Image.FromFile("../../img/undo.png");
+			//undoButton.BackgroundImageLayout = ImageLayout.Stretch;
 			undoButton.Click += Click_Undo;
+			undoButton.Enabled = false;
 			yield return undoButton;
 
 			Button redoButton = new Button();
 			redoButton.Image = Image.FromFile("../../img/redo.png");
+			//redoButton.BackgroundImageLayout = ImageLayout.Stretch;
 			redoButton.Click += Click_Redo;
+			redoButton.Enabled = false;
 			yield return redoButton;
 
 			Button flipBoardButton = new Button();
-			flipBoardButton.Text = "KickFlip";
-			flipBoardButton.TextAlign = ContentAlignment.TopLeft;
+			flipBoardButton.BackgroundImage = Image.FromFile("../../img/flipBoard.png");
+			flipBoardButton.BackgroundImageLayout = ImageLayout.Stretch;
 			flipBoardButton.Click += Click_FlipBoard;
 			yield return flipBoardButton;
+		}
+
+		private void UpdateButtonsActivity()
+		{
+			var undo = boardState.Undo(execute: false);
+			var redo = boardState.Redo(execute: false);
+
+			if (controlPanel.Controls[0] is Button undoButton)
+				if (undo) undoButton.Enabled = true;
+				else undoButton.Enabled = false;
+
+			if (controlPanel.Controls[1] is Button redoButton)
+				if (redo) redoButton.Enabled = true;
+				else redoButton.Enabled = false;
 		}
 
 		private void AdjustButtonSize(Button button, int number)

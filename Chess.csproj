@@ -56,7 +56,7 @@
       <DependentUpon>ChessForm.cs</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Controllers\ControlsPanel\ControlButtonsInit.cs">
+    <Compile Include="Controllers\ControlsPanel\ControlButtonsCommands.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Controllers\DragAndDrop.cs">
@@ -126,6 +126,7 @@
     <Content Include="img\figures\white_pawn_default.png" />
     <Content Include="img\figures\white_queen_default.png" />
     <Content Include="img\figures\white_rook_default.png" />
+    <Content Include="img\flipBoard.png" />
     <Content Include="img\redo.png" />
     <Content Include="img\undo.png" />
   </ItemGroup>

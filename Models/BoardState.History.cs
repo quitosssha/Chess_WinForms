@@ -8,10 +8,10 @@ namespace Chess
 {
 	public partial class BoardState
 	{
-		private Stack<ICommand> movesHistory = new Stack<ICommand>();
-		private Stack<ICommand> undonedMoves = new Stack<ICommand>();
+		private Stack<BoardAction> movesHistory = new Stack<BoardAction>();
+		private Stack<BoardAction> undonedMoves = new Stack<BoardAction>();
 
-		private void ExecuteMove(ICommand command)
+		private void ExecuteMove(BoardAction command)
 		{
 			undonedMoves.Clear();
 			command.Execute();
@@ -30,6 +30,7 @@ namespace Chess
 				var lastMove = movesHistory.Pop();
 				lastMove.Undo();
 				undonedMoves.Push(lastMove);
+				LastChangedCells = lastMove.ChangedCells;
 				SwapCurrentPlayer();
 			}
 
@@ -46,6 +47,7 @@ namespace Chess
 				var moveToRedo = undonedMoves.Pop();
 				moveToRedo.Execute();
 				movesHistory.Push(moveToRedo);
+				LastChangedCells = moveToRedo.ChangedCells;
 				SwapCurrentPlayer();
 			}
 

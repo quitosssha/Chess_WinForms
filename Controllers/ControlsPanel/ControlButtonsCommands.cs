@@ -11,20 +11,21 @@ namespace Chess
 	{
 		private void Click_Undo(object sender, EventArgs e)
 		{
-			if (boardState.Undo());
-				DisplayBoardState(boardState);
+			if (boardState.Undo())
+				DisplayBoardState(boardState.LastChangedCells);
 		}
 
 		private void Click_Redo(object sender, EventArgs e)
 		{
-			if (boardState.Redo());
-				DisplayBoardState(boardState);
+			if (boardState.Redo())
+				DisplayBoardState(boardState.LastChangedCells);
 		}
 
 		private void Click_FlipBoard(object sender, EventArgs e)
 		{
 			_viewFromBlack = !_viewFromBlack;
-			DisplayBoardState(boardState);
+			chessBoard.UpdateCellsColors(_viewFromBlack);
+			DisplayBoardState();
 		}
 	}
 }

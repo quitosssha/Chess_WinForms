@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Chess
 {
-    public static class ChessLayoutPanelExtensions
+    public static class Extensions
     {
         public static void FixCellsSize(this TableLayoutPanel chessBoard)
         {
@@ -19,20 +20,33 @@ namespace Chess
             }
         }
 
-        public static void FillBoardWithCells(this TableLayoutPanel chessBoard)
+        public static void FillBoardWithCells(this TableLayoutPanel chessBoard, bool viewFromBlack)
         {
             for (int row = 0; row < BoardState.Size; row++)
                 for (int col = 0; col < BoardState.Size; col++)
                 {
+                    var boardRow = row.InvertIfWhite(viewFromBlack);
+                    var boardColumn = col.InvertIfWhite(viewFromBlack);
                     var cell = new Panel()
                     {
                         BorderStyle = BorderStyle.FixedSingle,
                         Margin = new Padding(0),
-                        BackColor = (row + col) % 2 == 0 ? Color.FromArgb(118, 150, 86)
-                                                        : Color.FromArgb(238, 238, 210),
+                        BackColor = Cell.BasicColor(boardRow, boardColumn),
                         Dock = DockStyle.Fill
                     };
-                    chessBoard.Controls.Add(cell, col, row);
+                    chessBoard.Controls.Add(cell, boardRow, boardColumn);
+                }
+        }
+
+        public static void UpdateCellsColors(this TableLayoutPanel chessBoard, bool viewFromBlack)
+        {
+            for (int row = 0; row < BoardState.Size; row++)
+                for (int col = 0; col < BoardState.Size; col++)
+                {
+					var boardRow = row.InvertIfWhite(viewFromBlack);
+					var boardColumn = col.InvertIfWhite(viewFromBlack);
+                    if (chessBoard.GetControlFromPosition(col, row) is Panel cell)
+                        cell.BackColor = Cell.BasicColor(row, col);
                 }
         }
 
@@ -40,6 +54,12 @@ namespace Chess
         {
             var cellPosition = chessBoard.GetPositionFromControl(control);
             return new Point(cellPosition.Column, cellPosition.Row);
+        }
+
+        public static int InvertIfWhite(this int number, bool viewFromBlack)
+        {
+            if (number >= BoardState.Size) throw new ArgumentException();
+			return viewFromBlack? number : BoardState.Size - 1 - number;
         }
     }
 }
