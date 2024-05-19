@@ -34,7 +34,7 @@ namespace Chess
 			return true;
 		}
 
-		public bool IsUnderAttack(FigureColor playerColor, params Cell[] positions)
+		public bool IsUnderAttack(FigureColor playerColor, params Cell[] cellsToCheck)
 		{
 			for (int row = 0; row < Size; row++)
 				for (int col = 0; col < Size; col++)
@@ -42,9 +42,9 @@ namespace Chess
 					var figure = this[row, col];
 					if (figure != null && figure.Color != playerColor)
 					{
-						var moves = figure.GetAllowedMoves(this, row, col);
-						foreach (var position in positions)
-							if (moves.Contains((position.Row, position.Column)))
+						var moves = figure.GetCellsUnderAttack(this, new Cell(row, col));
+						foreach (var cell in cellsToCheck)
+							if (moves.Contains(new Cell(cell.Row, cell.Column)))
 								return true;
 					}
 				}

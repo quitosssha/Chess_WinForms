@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,13 +16,9 @@ namespace Chess
 		}
 		public int TimesMoved { get; set; } = 0;
 		public FigureColor Color { get; }
-		public abstract IEnumerable<(int Row, int Column)> GetAllowedMoves
-			(BoardState state, int row, int column);
-		public IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
-		{
-			foreach (var (toR, toC) in GetAllowedMoves(state, from.Row, from.Column))
-				yield return new Cell(toR, toC);
-		}
+		public abstract IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from);
+		public virtual IEnumerable<Cell> GetCellsUnderAttack(BoardState state, Cell from) =>
+			GetAllowedMoves(state, from);
 
 		protected readonly List<(int, int)> horizontalDirections = 
 			new List<(int, int)>() { (-1, 0), (1, 0), (0, -1), (0, 1) };
@@ -35,11 +32,13 @@ namespace Chess
 			(1, 2), (1, -2), (-1, 2), (-1, -2)
 		};
 
-		protected IEnumerable<(int, int)> GetAllowedMovesInDirections
-			(List<(int, int)> directions, BoardState state, int row, int column)
+		protected IEnumerable<Cell> GetAllowedMovesInDirections
+			(List<(int, int)> directions, BoardState state, Cell from)
 		{
 			foreach (var (dRow, dColumn) in directions)
 			{
+				var row = from.Row;
+				var column = from.Column;
 				var newR = row + dRow;
 				var newC = column + dColumn;
 
@@ -48,11 +47,11 @@ namespace Chess
 					var targetFigure = state[newR, newC];
 
 					if (targetFigure == null)
-						yield return (newR, newC);
+						yield return new Cell(newR, newC);
 					else
 					{
 						if (targetFigure.Color != Color)
-							yield return (newR, newC);
+							yield return new Cell(newR, newC);
 						break;
 					}
 
@@ -66,23 +65,20 @@ namespace Chess
 	public class King : Figure
 	{
 		public King(FigureColor color) : base(color) { }
-
-		public override IEnumerable<(int Row, int Column)> GetAllowedMoves
-			(BoardState state, int row, int column)
+		public override IEnumerable<Cell> GetCellsUnderAttack(BoardState state, Cell from)
 		{
-			for (int i = -1; i <= 1; i++)
-				for (int j = -1; j <= 1; j++)
-				{
-					var newR = row + i; 
-					var newC = column + j;
-					if (!state.InBounds(newR, newC)) continue;
+			foreach (var move in GetCommonMoves(state, from))
+				yield return move;
+		}
 
-					var targetColor = state[newR, newC]?.Color;
-					if (targetColor == Color) continue;
+		public override IEnumerable<Cell> GetAllowedMoves
+			(BoardState state, Cell from)
+		{
+			foreach (var move in GetCommonMoves(state, from))
+				yield return move;
 
-					yield return (newR, newC);
-				}
-
+			var row = from.Row;
+			var column = from.Column;
 			Cell[] shortCastling = new[] { 
 				new Cell(row, column - 1), 
 				new Cell(row, column - 2) };
@@ -99,7 +95,7 @@ namespace Chess
 					&& state.AreCellsEmpty(LongCastlingFull)
 					&& !state.IsUnderAttack(Color, longCastling))
 				{
-					yield return (row, column + 2);
+					yield return new Cell(row, column + 2);
 				}
 
 				rook = state[row, 7];
@@ -107,9 +103,25 @@ namespace Chess
 					&& state.AreCellsEmpty(shortCastling)
 					&& !state.IsUnderAttack(Color, shortCastling))
 				{
-					yield return (row, column - 2);
+					yield return new Cell(row, column - 2);
 				}
 			}
+		}
+
+		private IEnumerable<Cell> GetCommonMoves(BoardState state, Cell from)
+		{
+			for (int i = -1; i <= 1; i++)
+				for (int j = -1; j <= 1; j++)
+				{
+					var newR = from.Row + i;
+					var newC = from.Column + j;
+					if (!state.InBounds(newR, newC)) continue;
+
+					var targetColor = state[newR, newC]?.Color;
+					if (targetColor == Color) continue;
+
+					yield return new Cell(newR, newC);
+				}
 		}
 	}
 
@@ -117,34 +129,37 @@ namespace Chess
 	{
 		public Queen(FigureColor color): base(color) { }
 
-		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
-			=> GetAllowedMovesInDirections(horizontalDirections
-						.Concat(diagonalDirections).ToList(),
-						state, row, column);
+		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
+			=> GetAllowedMovesInDirections(
+				horizontalDirections.Concat(diagonalDirections).ToList(),
+				state, 
+				from);
 	}
 
 	public class Rook : Figure
 	{
 		public Rook(FigureColor color) : base(color) { }
 
-		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
-			=> GetAllowedMovesInDirections(horizontalDirections, state, row, column);
+		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
+			=> GetAllowedMovesInDirections(horizontalDirections, state, from);
 	}
 
 	public class Bishop : Figure
 	{
 		public Bishop(FigureColor color) : base(color) { }
 
-		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
-			=> GetAllowedMovesInDirections(diagonalDirections, state, row, column);
+		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
+			=> GetAllowedMovesInDirections(diagonalDirections, state, from);
 	}
 
 	public class Knight : Figure
 	{
 		public Knight(FigureColor color) : base(color) { }
 
-		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
+		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
 		{
+			var row = from.Row;
+			var column = from.Column;
 			foreach (var (dRow, dColumn) in knightDirections)
 			{
 				var newR = row + dRow;
@@ -153,7 +168,7 @@ namespace Chess
 
 				var figure = state[newR, newC];
 				if (figure == null || figure.Color != Color)
-					yield return (newR, newC);
+					yield return new Cell(newR, newC);
 			}
 		}
 	}
@@ -162,19 +177,21 @@ namespace Chess
 	{
 		public Pawn(FigureColor color) : base(color) { }
 
-		public override IEnumerable<(int Row, int Column)> GetAllowedMoves(BoardState state, int row, int column)
+		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
 		{
+			var row = from.Row;
+			var column = from.Column;
 			int direction = Color == FigureColor.White ? 1 : -1;
 			var newR = row + direction;
 
 			if (state.InBounds(newR, column) && state[newR, column] == null)
 			{
-				yield return (newR, column);
+				yield return new Cell(newR, column);
 
 				var startRow = Color == FigureColor.White ? 1 : 6;
 				var dobleStepRow = row + direction * 2;
 				if (row == startRow && state[dobleStepRow, column] == null)
-					yield return (dobleStepRow, column);
+					yield return new Cell(dobleStepRow, column);
 			}
 
 			for (int i = -1; i <= 1; i += 2)
@@ -184,7 +201,7 @@ namespace Chess
 				{
 					var targetFigure = state[newR, newC];
 					if (targetFigure != null && targetFigure.Color != Color)
-						yield return (newR, newC);
+						yield return new Cell(newR, newC);
 				}
 			}
 		}
