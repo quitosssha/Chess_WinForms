@@ -53,5 +53,8 @@ namespace Chess
 
 		public bool IsEnPassent() =>
 			Figure is Pawn && CapturedFigure == null && From.Column != To.Column;
+
+		public bool IsPromotion() =>
+			Figure is Pawn && (To.Row == 7 || To.Row == 0);
 	}
 }

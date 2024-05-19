@@ -14,7 +14,10 @@ namespace Chess
 		public Figure[,] Figures { get; private set; } = new Figure[Size, Size];
 		public FigureColor CurrentColorMove { get; private set; } = FigureColor.White;
 		public IEnumerable<Cell> LastChangedCells { get; private set; }
-		public IEnumerable<Cell> LastMove { get; private set; }
+		public IEnumerable<Cell> LastMove
+		{
+			get => movesHistory.Peek().ChangedCells;
+		}
 
 		public BoardState()
 		{
@@ -49,7 +52,7 @@ namespace Chess
 
 			if (figure.Color == CurrentColorMove && allowedMoves.Any(dst => to.Equals(dst)))
 			{
-				var moveToExecute = CreateBoardAction(figure, from, to);
+				var moveToExecute = CreateBoardAction(figure, from, to, simulate);
 				ExecuteMove(moveToExecute);
 
 				if (IsCheck(CurrentColorMove))
@@ -73,17 +76,19 @@ namespace Chess
 			SwapCurrentPlayer();
 			ReportMove(figure, from, to);
 			LastChangedCells = moveToExecute.ChangedCells;
-			LastMove = moveToExecute.ChangedCells;
 			if (IsCheckmate(CurrentColorMove))
 				Console.WriteLine($"{CurrentColorMove} checkmated!");
 		}
 
-		private BoardAction CreateBoardAction(Figure figure, Cell from, Cell to)
+		private BoardAction CreateBoardAction(Figure figure, Cell from, Cell to, bool simulate)
 		{
 			var capturedFigure = this[to];
 			var move = new Move(figure, from, to, capturedFigure, UpdateCell);
 			return move.IsCastling() ? new CastlingMove(move)
 				: move.IsEnPassent() ? new EnPassentMove(move)
+				: move.IsPromotion() ?
+					simulate ? new PromotionMove(move, new Queen(figure.Color))
+					: new PromotionMove(move, ChessForm.AskPlayerForFigure(figure.Color))
 				: move as BoardAction;
 		}
 

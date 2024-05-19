@@ -13,22 +13,11 @@ namespace Chess
 			if (state[from] is Pawn pawn
 				&& pawn.OnEnPassentLine(from))
 			{
-				if (RelevantOpponentsMove(state, from, to)
-					|| UndidEnPassent(state, from, to))
+				if (RelevantOpponentsMove(state, from, to))
 					if (state[new Cell(from.Row, to.Column)] is Pawn)
 						return true;
 			}
 			return false;
-		}
-
-		private bool UndidEnPassent(BoardState state, Cell from, Cell to)
-		{
-			var requiredCells = new Cell[] { from, to, new Cell(from.Row, to.Column) };
-			var lastChangedCells = state.LastMove.ToArray();
-			foreach (var cell in lastChangedCells)
-				if (!requiredCells.Contains(cell))
-					return false;
-			return true;
 		}
 
 		private bool RelevantOpponentsMove(BoardState state, Cell from, Cell to)

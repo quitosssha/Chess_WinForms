@@ -31,7 +31,6 @@ namespace Chess
 				lastMove.Undo();
 				undonedMoves.Push(lastMove);
 				LastChangedCells = lastMove.ChangedCells;
-				LastMove = movesHistory.Peek().ChangedCells;
 				SwapCurrentPlayer();
 			}
 
@@ -49,7 +48,6 @@ namespace Chess
 				moveToRedo.Execute();
 				movesHistory.Push(moveToRedo);
 				LastChangedCells = moveToRedo.ChangedCells;
-				LastMove = moveToRedo.ChangedCells;
 				SwapCurrentPlayer();
 			}
 

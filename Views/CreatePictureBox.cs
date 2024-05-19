@@ -10,7 +10,7 @@ namespace Chess
 {
     public static class ChessImages
     {
-        public static PictureBox CreatePictureBoxForFigure(Figure figure, int row, int column, string figureType = "default")
+        public static PictureBox CreatePictureBoxForFigure(Figure figure, int row = 0, int column = 0, string figureType = "default")
         {
             var pictureBox = new PictureBox()
             {

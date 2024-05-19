@@ -79,5 +79,16 @@ namespace Chess
             chessBoard.GetControlFromPosition(col, row) as Panel
 				//Impossible exception
 				?? throw new Exception($"No \"Panel\" at position ({row}, {col})!");
-    }
+
+		public static Figure AskPlayerForFigure(FigureColor color)
+		{
+			using (var form = new PromotionForm(color))
+			{
+				var result = form.ShowDialog();
+				if (result == DialogResult.OK)
+					return form.SelectedFigure;
+				throw new Exception("No figure selected!");
+			}
+		}
+	}
 }
