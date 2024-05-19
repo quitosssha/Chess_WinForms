@@ -12,6 +12,11 @@ namespace Chess
 		private Move pawnDisappears;
 		private Move figureAppears;
 
+		public override string UciNotation
+		{
+			get => pawnMove.UciNotation + figureAppears.Figure.UciNotation;
+		}
+
 		public PromotionMove(Move pawnMove, Figure promoteTo)
 		{
 			this.pawnMove = pawnMove;

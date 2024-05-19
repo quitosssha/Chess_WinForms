@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Chess
 {
@@ -10,6 +11,11 @@ namespace Chess
 	{
 		private Move kingMove;
 		private Move rookMove;
+
+		public override string UciNotation
+		{
+			get => kingMove.UciNotation;
+		}
 
 		public CastlingMove(Move kingMove)
 		{

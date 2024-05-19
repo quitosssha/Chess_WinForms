@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Chess
 {
@@ -11,6 +12,10 @@ namespace Chess
 	{
 		private Move pawnMove;
 		private Move captureOpponent;
+		public override string UciNotation
+		{
+			get => pawnMove.UciNotation;
+		}
 
 		public EnPassentMove(Move pawnMove)
 		{

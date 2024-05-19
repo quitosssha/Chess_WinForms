@@ -13,5 +13,7 @@ namespace Chess
 		public abstract void Execute();
 
 		public abstract void Undo();
+
+		public abstract string UciNotation { get; }
 	}
 }

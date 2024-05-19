@@ -103,6 +103,8 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stockfish\BoardStateStockfishExtensions.cs" />
+    <Compile Include="Stockfish\StockfishEngine.cs" />
     <Compile Include="Views\ControlPanelButtons.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +131,24 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Stockfish\stockfish_distr\AUTHORS" />
+    <None Include="Stockfish\stockfish_distr\CITATION.cff" />
+    <None Include="Stockfish\stockfish_distr\CONTRIBUTING.md" />
+    <None Include="Stockfish\stockfish_distr\README.md" />
+    <None Include="Stockfish\stockfish_distr\src\incbin\UNLICENCE" />
+    <None Include="Stockfish\stockfish_distr\src\Makefile" />
+    <None Include="Stockfish\stockfish_distr\wiki\Advanced-topics.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Compiling-from-source.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Developers.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Download-and-usage.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Governance-and-responsibilities.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Home.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Regression-Tests.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Stockfish-FAQ.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Terminology.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\UCI-&amp;-Commands.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\Useful-data.md" />
+    <None Include="Stockfish\stockfish_distr\wiki\_Footer.md" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -150,6 +170,57 @@
     <Content Include="img\flipBoard.png" />
     <Content Include="img\redo.png" />
     <Content Include="img\undo.png" />
+    <Content Include="Stockfish\stockfish_distr\Copying.txt" />
+    <Content Include="Stockfish\stockfish_distr\src\benchmark.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\benchmark.h" />
+    <Content Include="Stockfish\stockfish_distr\src\bitboard.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\bitboard.h" />
+    <Content Include="Stockfish\stockfish_distr\src\evaluate.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\evaluate.h" />
+    <Content Include="Stockfish\stockfish_distr\src\incbin\incbin.h" />
+    <Content Include="Stockfish\stockfish_distr\src\main.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\misc.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\misc.h" />
+    <Content Include="Stockfish\stockfish_distr\src\movegen.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\movegen.h" />
+    <Content Include="Stockfish\stockfish_distr\src\movepick.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\movepick.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\evaluate_nnue.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\evaluate_nnue.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\features\half_ka_v2_hm.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\features\half_ka_v2_hm.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\layers\affine_transform.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\layers\affine_transform_sparse_input.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\layers\clipped_relu.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\layers\simd.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\layers\sqr_clipped_relu.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\nnue_accumulator.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\nnue_architecture.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\nnue_common.h" />
+    <Content Include="Stockfish\stockfish_distr\src\nnue\nnue_feature_transformer.h" />
+    <Content Include="Stockfish\stockfish_distr\src\perft.h" />
+    <Content Include="Stockfish\stockfish_distr\src\position.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\position.h" />
+    <Content Include="Stockfish\stockfish_distr\src\search.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\search.h" />
+    <Content Include="Stockfish\stockfish_distr\src\syzygy\tbprobe.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\syzygy\tbprobe.h" />
+    <Content Include="Stockfish\stockfish_distr\src\thread.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\thread.h" />
+    <Content Include="Stockfish\stockfish_distr\src\thread_win32_osx.h" />
+    <Content Include="Stockfish\stockfish_distr\src\timeman.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\timeman.h" />
+    <Content Include="Stockfish\stockfish_distr\src\tt.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\tt.h" />
+    <Content Include="Stockfish\stockfish_distr\src\tune.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\tune.h" />
+    <Content Include="Stockfish\stockfish_distr\src\types.h" />
+    <Content Include="Stockfish\stockfish_distr\src\uci.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\uci.h" />
+    <Content Include="Stockfish\stockfish_distr\src\ucioption.cpp" />
+    <Content Include="Stockfish\stockfish_distr\src\ucioption.h" />
+    <Content Include="Stockfish\stockfish_distr\stockfish_engine.exe" />
+    <Content Include="Stockfish\stockfish_distr\Top CPU Contributors.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

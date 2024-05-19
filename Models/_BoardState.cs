@@ -74,7 +74,7 @@ namespace Chess
 		private void FinalizeMove(Cell from, Cell to, Figure figure, BoardAction moveToExecute)
 		{
 			SwapCurrentPlayer();
-			ReportMove(figure, from, to);
+			ReportMove(moveToExecute);
 			LastChangedCells = moveToExecute.ChangedCells;
 			if (IsCheckmate(CurrentColorMove))
 				Console.WriteLine($"{CurrentColorMove} checkmated!");

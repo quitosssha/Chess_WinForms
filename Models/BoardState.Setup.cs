@@ -27,13 +27,9 @@ namespace Chess
 			Figures[row, 7] = new Rook(color);
 		}
 
-		private void ReportMove(Figure figure, Cell from, Cell to)
+		private void ReportMove(BoardAction move)
 		{
-			var color = figure.Color.ToString().ToLower();
-			var name = figure.GetType().Name;
-			Console.WriteLine
-				($"Moved {color} {name} from ({Size - from.Column},{from.Row}) " +
-				$"to ({Size - to.Column},{to.Row})");
+			Console.WriteLine(move.UciNotation);
 		}
 	}
 }

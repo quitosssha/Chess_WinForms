@@ -10,7 +10,7 @@ namespace Chess
 {
 	public class PromotionForm : Form
 	{
-		private const int ButtonSize = 50; // Размер стороны квадратной кнопки
+		private const int ButtonSize = 60; // Размер стороны квадратной кнопки
 		private const int ButtonMargin = 10; // Отступ между кнопками
 		private const int StartPositionX = 10; // Начальная позиция первой кнопки по оси X
 		private const int PositionY = 20; // Позиция кнопок по оси Y

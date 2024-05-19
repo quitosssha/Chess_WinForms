@@ -5,6 +5,8 @@ namespace Chess
 {
 	public class King : Figure
 	{
+		public override string UciNotation => "k";
+
 		public King(FigureColor color) : base(color) { }
 		public override IEnumerable<Cell> GetCellsUnderAttack(BoardState state, Cell from)
 		{

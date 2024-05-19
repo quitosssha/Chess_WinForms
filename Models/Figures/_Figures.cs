@@ -9,6 +9,7 @@ namespace Chess
 {
 	public abstract class Figure
 	{
+		public abstract string UciNotation { get; }
 		public Figure(FigureColor color)
 		{
 			Color = color;

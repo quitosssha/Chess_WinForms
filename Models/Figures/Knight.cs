@@ -6,6 +6,8 @@ namespace Chess
 	{
 		public Knight(FigureColor color) : base(color) { }
 
+		public override string UciNotation => "n";
+
 		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
 		{
 			var row = from.Row;

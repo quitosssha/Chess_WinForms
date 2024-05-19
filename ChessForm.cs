@@ -1,14 +1,7 @@
-﻿using Chess;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Serialization;
+using Chess.Stockfish;
 
 namespace Chess
 {
@@ -18,6 +11,7 @@ namespace Chess
 		private Panel controlPanel = new Panel();
 		private BoardState boardState = new BoardState();
 		private bool _viewFromBlack = false;
+		private StockfishEngine engine = new StockfishEngine("../../Stockfish/stockfish_distr/stockfish_engine.exe");
 
 		public ChessForm()
 		{
@@ -25,8 +19,19 @@ namespace Chess
 			InitializeControlPanel();
 			InitializeComponent();
 
-            AdjustAllSizes();
-        }
+			AdjustAllSizes();
+			A();
+		}
+
+		private async void A()
+		{
+			engine.StartEngine();
+			engine.SendCommand("position startpos");
+			engine.SendCommand("go depth 20");
+			string result = await engine.ReadOutputAsync();
+			Console.WriteLine(result);
+			engine.StopEngine();
+		}
 
 		protected override void OnResize(EventArgs e)
 		{

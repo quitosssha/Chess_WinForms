@@ -7,6 +7,8 @@ namespace Chess
 	{
 		public Queen(FigureColor color): base(color) { }
 
+		public override string UciNotation => "q";
+
 		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
 			=> GetAllowedMovesInDirections(
 				horizontalDirections.Concat(diagonalDirections).ToList(),

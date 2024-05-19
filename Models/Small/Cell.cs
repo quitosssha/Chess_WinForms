@@ -24,7 +24,8 @@ namespace Chess
 
 		public override string ToString()
 		{
-			return $"({Row}, {Column})";
+			char column = (char)(BoardState.Size - 1 - Column + 97);
+			return $"{column}{Row + 1}";
 		}
 
 		public static int Distance(Cell a, Cell b) =>

@@ -13,6 +13,10 @@ namespace Chess
 		public Cell To { get; }
 		public Figure CapturedFigure { get; }
 		public Action<Cell, Figure> UpdateCell { get; }
+		public override string UciNotation 
+		{
+			get => $"{From}{To}";
+		}
 
 		public override IEnumerable<Cell> ChangedCells
 		{
