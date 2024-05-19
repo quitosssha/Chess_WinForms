@@ -62,11 +62,20 @@
     <Compile Include="Controllers\DragAndDrop.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Models\Figures\Bishop.cs" />
+    <Compile Include="Models\Figures\King.cs" />
+    <Compile Include="Models\Figures\Knight.cs" />
+    <Compile Include="Models\Figures\Pawn.cs" />
+    <Compile Include="Models\Figures\Pawn.EnPassent.cs">
+      <DependentUpon>Pawn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Figures\Queen.cs" />
+    <Compile Include="Models\Figures\Rook.cs" />
     <Compile Include="Models\Small\BoardAction.cs" />
     <Compile Include="Models\Small\Cell.cs" />
     <Compile Include="Models\Small\ICommand.cs" />
-    <Compile Include="Models\_Figures.cs" />
-    <Compile Include="Models\FigureColor.cs">
+    <Compile Include="Models\Figures\_Figures.cs" />
+    <Compile Include="Models\Figures\FigureColor.cs">
       <DependentUpon>_Figures.cs</DependentUpon>
     </Compile>
     <Compile Include="Models\_BoardState.cs" />
@@ -81,6 +90,9 @@
     </Compile>
     <Compile Include="Models\Move.cs" />
     <Compile Include="Models\Move.Castling.cs">
+      <DependentUpon>Move.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Move.EnPassent.cs">
       <DependentUpon>Move.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />

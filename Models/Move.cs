@@ -34,19 +34,24 @@ namespace Chess
 
 		public override void Execute()
 		{
-			Figure.TimesMoved++;
+			if (Figure != null)
+				Figure.TimesMoved++;
 			UpdateCell(From, null);
 			UpdateCell(To, Figure);
 		}
 
 		public override void Undo()
 		{
-			Figure.TimesMoved--;
+			if (Figure != null)
+				Figure.TimesMoved--;
 			UpdateCell(From, Figure);
 			UpdateCell(To, CapturedFigure);
 		}
 
 		public bool IsCastling() =>
 			Figure is King && Cell.Distance(From, To) > 1;
+
+		public bool IsEnPassent() =>
+			Figure is Pawn && CapturedFigure == null && From.Column != To.Column;
 	}
 }

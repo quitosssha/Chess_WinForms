@@ -14,6 +14,7 @@ namespace Chess
 		public Figure[,] Figures { get; private set; } = new Figure[Size, Size];
 		public FigureColor CurrentColorMove { get; private set; } = FigureColor.White;
 		public IEnumerable<Cell> LastChangedCells { get; private set; }
+		public IEnumerable<Cell> LastMove { get; private set; }
 
 		public BoardState()
 		{
@@ -50,12 +51,11 @@ namespace Chess
 			{
 				var capturedFigure = this[to];
 				var move = new Move(figure, from, to, capturedFigure, UpdateCell);
-				BoardAction moveToExecute = move.IsCastling() ? new CastlingMove(move) as BoardAction : move;
+				BoardAction moveToExecute = 
+					move.IsCastling() ? new CastlingMove(move)
+					: move.IsEnPassent() ? new EnPassentMove(move)
+					: move as BoardAction;
 				ExecuteMove(moveToExecute);
-				//if (castlingMove != null)
-				//	ExecuteMove(new CastlingMove(move));
-				//else
-				//	ExecuteMove(move);
 
 				if (IsCheck(CurrentColorMove))
 				{
@@ -70,6 +70,7 @@ namespace Chess
 					SwapCurrentPlayer();
 					ReportMove(figure, from, to);
 					LastChangedCells = moveToExecute.ChangedCells;
+					LastMove = moveToExecute.ChangedCells;
 					if (IsCheckmate(CurrentColorMove))
 						Console.WriteLine($"{CurrentColorMove} checkmated!");
 				}
