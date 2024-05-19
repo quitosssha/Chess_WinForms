@@ -49,12 +49,7 @@ namespace Chess
 
 			if (figure.Color == CurrentColorMove && allowedMoves.Any(dst => to.Equals(dst)))
 			{
-				var capturedFigure = this[to];
-				var move = new Move(figure, from, to, capturedFigure, UpdateCell);
-				BoardAction moveToExecute = 
-					move.IsCastling() ? new CastlingMove(move)
-					: move.IsEnPassent() ? new EnPassentMove(move)
-					: move as BoardAction;
+				var moveToExecute = CreateBoardAction(figure, from, to);
 				ExecuteMove(moveToExecute);
 
 				if (IsCheck(CurrentColorMove))
@@ -66,18 +61,30 @@ namespace Chess
 				if (simulate)
 					TerminateLastMove();
 				else
-				{
-					SwapCurrentPlayer();
-					ReportMove(figure, from, to);
-					LastChangedCells = moveToExecute.ChangedCells;
-					LastMove = moveToExecute.ChangedCells;
-					if (IsCheckmate(CurrentColorMove))
-						Console.WriteLine($"{CurrentColorMove} checkmated!");
-				}
+					FinalizeMove(from, to, figure, moveToExecute);
 				return true;
 			}
 
 			return false;
+		}
+
+		private void FinalizeMove(Cell from, Cell to, Figure figure, BoardAction moveToExecute)
+		{
+			SwapCurrentPlayer();
+			ReportMove(figure, from, to);
+			LastChangedCells = moveToExecute.ChangedCells;
+			LastMove = moveToExecute.ChangedCells;
+			if (IsCheckmate(CurrentColorMove))
+				Console.WriteLine($"{CurrentColorMove} checkmated!");
+		}
+
+		private BoardAction CreateBoardAction(Figure figure, Cell from, Cell to)
+		{
+			var capturedFigure = this[to];
+			var move = new Move(figure, from, to, capturedFigure, UpdateCell);
+			return move.IsCastling() ? new CastlingMove(move)
+				: move.IsEnPassent() ? new EnPassentMove(move)
+				: move as BoardAction;
 		}
 
 		public bool InBounds(int row, int column) =>

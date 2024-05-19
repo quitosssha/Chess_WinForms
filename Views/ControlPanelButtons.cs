@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,5 +58,22 @@ namespace Chess
 			button.Location = new Point(leftShift, margin);
 			button.Size = buttonSize;
 		}
+
+		private PictureBox CreateCurrentPlayerIndicator()
+		{
+			var currentPlayerIndicator = new CircularPictureBox();
+			currentPlayerIndicator.Size = new Size(20, 20); // Размер кружка
+			currentPlayerIndicator.BackColor = TransformFigureColorToColor(boardState.CurrentColorMove);
+			return currentPlayerIndicator;
+		}
+
+		private void UpdateCurrentPlayerIndicator()
+		{
+			if (controlPanel.Controls[3] is PictureBox indicator)
+				indicator.BackColor = TransformFigureColorToColor(boardState.CurrentColorMove);
+		}
+
+		private Color TransformFigureColorToColor(FigureColor figureColor) =>
+			figureColor == FigureColor.White ? Color.White : Color.Black;
 	}
 }

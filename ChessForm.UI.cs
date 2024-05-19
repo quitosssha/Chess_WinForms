@@ -31,6 +31,8 @@ namespace Chess
 
             foreach(var button in CreateControlPanelButtons())
 				controlPanel.Controls.Add(button);
+
+            controlPanel.Controls.Add(CreateCurrentPlayerIndicator());
             
             Controls.Add(controlPanel);
         }
@@ -43,11 +45,15 @@ namespace Chess
 			controlPanel.Height = (int)(ClientSize.Height * 0.1);
 			controlPanel.Location = new Point(chessBoard.Location.X, chessBoard.Bottom);
             controlPanel.Width = chessBoard.Width;
-            for (int i = 0; i < controlPanel.Controls.Count; i++)
+            for (int i = 0; i < 3; i++)
             {
                 if (controlPanel.Controls[i] is Button button)
                     AdjustButtonSize(button, i);
             }
-        }
+            if (controlPanel.Controls[3] is PictureBox currentPlayerIndicator)
+				currentPlayerIndicator.Location = new Point(
+                    controlPanel.Width - currentPlayerIndicator.Width - 10, 
+                    (controlPanel.Height - currentPlayerIndicator.Height) / 2);
+		}
     }
 }

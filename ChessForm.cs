@@ -21,9 +21,9 @@ namespace Chess
 
 		public ChessForm()
 		{
-			InitializeComponent();
 			InitializeChessBoard();
 			InitializeControlPanel();
+			InitializeComponent();
 
             AdjustAllSizes();
         }
@@ -51,7 +51,10 @@ namespace Chess
 					}
 
 			if (controlPanel.Controls.Count != 0)
+			{
 				UpdateButtonsActivity();
+				UpdateCurrentPlayerIndicator();
+			}
 		}
 
 		private void DisplayCellAt(int row, int column)
