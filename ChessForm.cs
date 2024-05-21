@@ -18,19 +18,7 @@ namespace Chess
 			InitializeChessBoard();
 			InitializeControlPanel();
 			InitializeComponent();
-
 			AdjustAllSizes();
-			A();
-		}
-
-		private async void A()
-		{
-			engine.StartEngine();
-			engine.SendCommand("position startpos");
-			engine.SendCommand("go depth 20");
-			string result = await engine.ReadOutputAsync();
-			Console.WriteLine(result);
-			engine.StopEngine();
 		}
 
 		protected override void OnResize(EventArgs e)
@@ -94,6 +82,27 @@ namespace Chess
 					return form.SelectedFigure;
 				throw new Exception("No figure selected!");
 			}
+		}
+
+		private async void CalculateAndExecuteNextMove(int depth = 15)
+		{
+			string initCommand = "position startpos moves " + boardState.GetAllMovesInUCI();
+			string goCommand = $"go depth {depth}";
+			engine.StartEngine();
+			engine.SendCommand(initCommand);
+			engine.SendCommand(goCommand);
+			string recommendedMove = await engine.ReadBestMoveAsync();
+			Console.WriteLine(recommendedMove);
+
+			string[] moveParts = recommendedMove.Split();
+			string bestMove = moveParts[1];
+			bool allowedMove = boardState.TryMoveFigure(bestMove);
+
+			if (allowedMove)
+				DisplayBoardState(boardState.LastChangedCells);
+			//sourcePictureBox.Tag = targetPosition;
+
+			engine.StopEngine();
 		}
 	}
 }

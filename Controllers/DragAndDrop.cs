@@ -52,14 +52,9 @@ namespace Chess
     			bool allowedMove = boardState.TryMoveFigure(from, to);
 
                 if (allowedMove)
-                {
-                    //if (sourcePictureBox.Parent is Panel sourceCell)
-                    //    sourceCell.Controls.Remove(sourcePictureBox);
-                    //targetCell.Controls.Clear();
-                    //targetCell.Controls.Add(sourcePictureBox);
                     DisplayBoardState(boardState.LastChangedCells);
                     sourcePictureBox.Tag = targetPosition;
-				}
+				
             }
         }
     }

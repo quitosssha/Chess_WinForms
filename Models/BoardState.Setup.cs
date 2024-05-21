@@ -29,7 +29,8 @@ namespace Chess
 
 		private void ReportMove(BoardAction move)
 		{
-			Console.WriteLine(move.UciNotation);
+			//Console.WriteLine(move.UciNotation);
+			Console.WriteLine(GetAllMovesInUCI());
 		}
 	}
 }

@@ -38,9 +38,13 @@ namespace Chess.Stockfish
 			stockfishProcess.StandardInput.Flush();
 		}
 
-		public async Task<string> ReadOutputAsync()
+		public async Task<string> ReadBestMoveAsync()
 		{
-			string output = await stockfishProcess.StandardOutput.ReadLineAsync();
+			string output;
+
+			do output = await stockfishProcess.StandardOutput.ReadLineAsync();
+			while (!output.StartsWith("bestmove"));
+
 			return output;
 		}
 

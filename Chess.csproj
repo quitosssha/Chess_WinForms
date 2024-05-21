@@ -168,6 +168,7 @@
     <Content Include="img\figures\white_queen_default.png" />
     <Content Include="img\figures\white_rook_default.png" />
     <Content Include="img\flipBoard.png" />
+    <Content Include="img\calculate.png" />
     <Content Include="img\redo.png" />
     <Content Include="img\undo.png" />
     <Content Include="Stockfish\stockfish_distr\Copying.txt" />

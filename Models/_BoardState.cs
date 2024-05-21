@@ -43,7 +43,8 @@ namespace Chess
 			private set => this[cell.Row, cell.Column] = value;
 		}
 
-		public bool TryMoveFigure(Cell from, Cell to, bool simulate = false)
+
+		public bool TryMoveFigure(Cell from, Cell to, bool simulate = false, Figure figureToPromote = null)
 		{
 			var figure = this[from]
 				?? throw new Exception($"No figure at position {from}");
@@ -52,7 +53,7 @@ namespace Chess
 
 			if (figure.Color == CurrentColorMove && allowedMoves.Any(dst => to.Equals(dst)))
 			{
-				var moveToExecute = CreateBoardAction(figure, from, to, simulate);
+				var moveToExecute = CreateBoardAction(figure, from, to, simulate, figureToPromote);
 				ExecuteMove(moveToExecute);
 
 				if (IsCheck(CurrentColorMove))
@@ -80,7 +81,7 @@ namespace Chess
 				Console.WriteLine($"{CurrentColorMove} checkmated!");
 		}
 
-		private BoardAction CreateBoardAction(Figure figure, Cell from, Cell to, bool simulate)
+		private BoardAction CreateBoardAction(Figure figure, Cell from, Cell to, bool simulate, Figure figureToPromote)
 		{
 			var capturedFigure = this[to];
 			var move = new Move(figure, from, to, capturedFigure, UpdateCell);
@@ -88,6 +89,7 @@ namespace Chess
 				: move.IsEnPassent() ? new EnPassentMove(move)
 				: move.IsPromotion() ?
 					simulate ? new PromotionMove(move, new Queen(figure.Color))
+					: figureToPromote != null ? new PromotionMove(move, figureToPromote)
 					: new PromotionMove(move, ChessForm.AskPlayerForFigure(figure.Color))
 				: move as BoardAction;
 		}
@@ -101,5 +103,8 @@ namespace Chess
 				if (this[cell] != null) return false;
 			return true;
 		}
+
+		public string GetAllMovesInUCI() =>
+			string.Join(" ", movesHistory.Select(m => m.UciNotation).Reverse());
 	}
 }

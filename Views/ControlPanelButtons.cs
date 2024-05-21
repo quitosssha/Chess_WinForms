@@ -32,6 +32,12 @@ namespace Chess
 			flipBoardButton.BackgroundImageLayout = ImageLayout.Stretch;
 			flipBoardButton.Click += Click_FlipBoard;
 			yield return flipBoardButton;
+
+			Button robotButton = new Button();
+			robotButton.BackgroundImage = Image.FromFile("../../img/calculate.png");
+			robotButton.BackgroundImageLayout = ImageLayout.Stretch;
+			robotButton.Click += Click_CalculateMove;
+			yield return robotButton;
 		}
 
 		private void UpdateButtonsActivity()

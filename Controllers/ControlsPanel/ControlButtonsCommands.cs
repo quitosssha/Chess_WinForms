@@ -27,5 +27,10 @@ namespace Chess
 			chessBoard.UpdateCellsColors(_viewFromBlack);
 			DisplayBoardState();
 		}
+
+		private void Click_CalculateMove(object sender, EventArgs e)
+		{
+			CalculateAndExecuteNextMove();
+		}
 	}
 }
