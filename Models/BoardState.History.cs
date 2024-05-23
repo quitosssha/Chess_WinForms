@@ -16,6 +16,10 @@ namespace Chess
 			undonedMoves.Clear();
 			command.Execute();
 			movesHistory.Push(command);
+			if (positionsRepetition.ContainsKey(this.ToString()))
+				positionsRepetition[this.ToString()]++;
+			else
+				positionsRepetition[this.ToString()] = 1;
 		}
 
 		private void TerminateLastMove() => movesHistory.Pop().Undo();
@@ -27,6 +31,7 @@ namespace Chess
 
 			if (execute)
 			{
+				positionsRepetition[this.ToString()]--;
 				var lastMove = movesHistory.Pop();
 				lastMove.Undo();
 				undonedMoves.Push(lastMove);
@@ -46,6 +51,7 @@ namespace Chess
 			{
 				var moveToRedo = undonedMoves.Pop();
 				moveToRedo.Execute();
+				positionsRepetition[this.ToString()]++;
 				movesHistory.Push(moveToRedo);
 				LastChangedCells = moveToRedo.ChangedCells;
 				SwapCurrentPlayer();

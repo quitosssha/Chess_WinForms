@@ -75,7 +75,7 @@ namespace Chess
 
 		private void UpdateCurrentPlayerIndicator()
 		{
-			if (controlPanel.Controls[3] is PictureBox indicator)
+			if (controlPanel.Controls[4] is PictureBox indicator)
 				indicator.BackColor = TransformFigureColorToColor(boardState.CurrentColorMove);
 		}
 

@@ -88,6 +88,9 @@
     <Compile Include="Models\BoardState.KingInTrouble.cs">
       <DependentUpon>_BoardState.cs</DependentUpon>
     </Compile>
+    <Compile Include="Models\BoardState.Draw.cs">
+      <DependentUpon>_BoardState.cs</DependentUpon>
+    </Compile>
     <Compile Include="Models\Move.cs" />
     <Compile Include="Models\Move.Castling.cs">
       <DependentUpon>Move.cs</DependentUpon>

@@ -46,6 +46,8 @@ namespace Chess
 
 		public bool TryMoveFigure(Cell from, Cell to, bool simulate = false, Figure figureToPromote = null)
 		{
+			if (from == to) return false;
+
 			var figure = this[from]
 				?? throw new Exception($"No figure at position {from}");
 
@@ -79,6 +81,8 @@ namespace Chess
 			LastChangedCells = moveToExecute.ChangedCells;
 			if (IsCheckmate(CurrentColorMove))
 				Console.WriteLine($"{CurrentColorMove} checkmated!");
+			if (IsDraw(CurrentColorMove))
+				Console.WriteLine("Draw!");
 		}
 
 		private BoardAction CreateBoardAction(Figure figure, Cell from, Cell to, bool simulate, Figure figureToPromote)
@@ -106,5 +110,29 @@ namespace Chess
 
 		public string GetAllMovesInUCI() =>
 			string.Join(" ", movesHistory.Select(m => m.UciNotation).Reverse());
+
+		public override string ToString()
+		{
+			var str = new StringBuilder();
+			for (int row = 0; row < Size; row++)
+			{
+				for (int col = 0; col < Size; col++)
+				{
+					var figure = this[row, col];
+					if (figure == null)
+					{
+						str.Append(".");
+						continue;
+					}
+					var notation = figure.ToString();
+					if (figure.Color == FigureColor.Black)
+						str.Append(notation);
+					else
+						str.Append(notation.ToUpper());
+				}
+				str.Append("/");
+			}
+			return str.ToString();
+		}
 	}
 }

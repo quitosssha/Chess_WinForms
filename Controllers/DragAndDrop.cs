@@ -48,12 +48,14 @@ namespace Chess
 
                 var from = new Cell(f(sourcePosition.Y), f(sourcePosition.X));
                 var to = new Cell(f(targetPosition.Y), f(targetPosition.X));
-
+                
     			bool allowedMove = boardState.TryMoveFigure(from, to);
 
                 if (allowedMove)
+                {
                     DisplayBoardState(boardState.LastChangedCells);
                     sourcePictureBox.Tag = targetPosition;
+                }
 				
             }
         }

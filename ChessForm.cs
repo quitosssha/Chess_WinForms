@@ -39,9 +39,7 @@ namespace Chess
 			else
 				for (int row = 0; row < BoardState.Size; row++)
 					for (int col = 0; col < BoardState.Size; col++)
-					{
 						DisplayCellAt(row, col);
-					}
 
 			if (controlPanel.Controls.Count != 0)
 			{
@@ -92,6 +90,7 @@ namespace Chess
 			engine.SendCommand(initCommand);
 			engine.SendCommand(goCommand);
 			string recommendedMove = await engine.ReadBestMoveAsync();
+			engine.StopEngine();
 			Console.WriteLine(recommendedMove);
 
 			string[] moveParts = recommendedMove.Split();
@@ -100,9 +99,9 @@ namespace Chess
 
 			if (allowedMove)
 				DisplayBoardState(boardState.LastChangedCells);
-			//sourcePictureBox.Tag = targetPosition;
+			else
+				throw new Exception($"Can't execute move {bestMove}, sent by Stockfish!");
 
-			engine.StopEngine();
 		}
 	}
 }

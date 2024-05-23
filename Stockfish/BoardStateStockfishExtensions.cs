@@ -18,7 +18,12 @@ namespace Chess
 
 		public static bool TryMoveFigure(this BoardState state, string moveInUciNotation)
 		{
-			var from = moveInUciNotation.Substring(0, 2).ParseUciMoveToCell();
+            if (moveInUciNotation == "(none)")
+            {
+				Console.WriteLine("No move entered");
+				return false;
+            }
+            var from = moveInUciNotation.Substring(0, 2).ParseUciMoveToCell();
 			var to = moveInUciNotation.Substring(2, 2).ParseUciMoveToCell();
 			Figure figure = null;
 			if (moveInUciNotation.Length > 4)

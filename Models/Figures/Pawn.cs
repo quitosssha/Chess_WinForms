@@ -8,7 +8,7 @@ namespace Chess
 	{
 		public Pawn(FigureColor color) : base(color) { }
 
-		public override string UciNotation => "";
+		public override string UciNotation => "p";
 
 		public override IEnumerable<Cell> GetAllowedMoves(BoardState state, Cell from)
 		{
