@@ -15,14 +15,12 @@ namespace Chess
 		{
 			Button undoButton = new Button();
 			undoButton.Image = Image.FromFile("../../img/undo.png");
-			//undoButton.BackgroundImageLayout = ImageLayout.Stretch;
 			undoButton.Click += Click_Undo;
 			undoButton.Enabled = false;
 			yield return undoButton;
 
 			Button redoButton = new Button();
 			redoButton.Image = Image.FromFile("../../img/redo.png");
-			//redoButton.BackgroundImageLayout = ImageLayout.Stretch;
 			redoButton.Click += Click_Redo;
 			redoButton.Enabled = false;
 			yield return redoButton;
@@ -38,6 +36,12 @@ namespace Chess
 			robotButton.BackgroundImageLayout = ImageLayout.Stretch;
 			robotButton.Click += Click_CalculateMove;
 			yield return robotButton;
+
+			Button tutorialButton = new Button();
+			tutorialButton.BackgroundImage = Image.FromFile("../../img/help.png");
+			tutorialButton.BackgroundImageLayout = ImageLayout.Stretch;
+			tutorialButton.Click += Click_ShowTutorial;
+			yield return tutorialButton;
 		}
 
 		private void UpdateButtonsActivity()
@@ -75,7 +79,7 @@ namespace Chess
 
 		private void UpdateCurrentPlayerIndicator()
 		{
-			if (controlPanel.Controls[4] is PictureBox indicator)
+			if (controlPanel.Controls[5] is PictureBox indicator)
 				indicator.BackColor = TransformFigureColorToColor(boardState.CurrentColorMove);
 		}
 

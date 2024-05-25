@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Chess
 {
@@ -31,6 +32,12 @@ namespace Chess
 		private void Click_CalculateMove(object sender, EventArgs e)
 		{
 			CalculateAndExecuteNextMove();
+		}
+
+		private void Click_ShowTutorial(object sender, EventArgs e)
+		{
+			var tutorial = new TutorialForm();
+			tutorial.ShowDialog();
 		}
 	}
 }
